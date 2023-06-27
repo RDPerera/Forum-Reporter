@@ -4,6 +4,6 @@
 [package]
   distribution = "2201.6.0"
   name = "daily_forum_reporter"
-  org = "ucscmie"
+  org = "dilan"
   version = "0.1.0"
 
