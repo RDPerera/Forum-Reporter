@@ -6,13 +6,14 @@ const TYPE_FORUM_CHANNEL = 15;
 const time:Seconds ONE_DAY_IN_SECONDS = 86400;
 configurable int forumChannelId = ?;
 
-function readThreads(ActiveThreads activeThreads) returns string|error {
+function generateSummaryFromRecentThreadMessages(ActiveThreads activeThreads) returns string|error {
     string result = "";
     foreach ChannelThread thread in activeThreads.threads {
 
         if !check hasRecentMessages(thread) {
             continue;
         }
+        log:printInfo(string `Generating summary for thread: ${thread.name}`);
         string prompt = check constructPrompt(thread);
 
         string|error generateChatCompletionResult = generateChatCompletion(prompt);
@@ -61,11 +62,12 @@ public function main() returns error? {
 
     ActiveThreads activeThreads = check getActiveThreads(channel.guild_id);
 
-    string result = check readThreads(activeThreads);
-    if result == "" {
+    string summary = check generateSummaryFromRecentThreadMessages(activeThreads);
+    if summary == "" {
+        log:printInfo("Active threads have no recent messages.");
         return;
     }
 
     string subject = string `[Discord Forum Summery] Bellerina Forum Threads : ${regex:split(time:utcToString(time:utcNow()), "T")[0]}`;
-    check sendEmail(subject, TOP_HTML + result + BOTTOM_HTML);
+    check sendEmail(subject, TOP_HTML + summary + BOTTOM_HTML);
 }
