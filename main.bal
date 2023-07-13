@@ -54,20 +54,21 @@ function hasRecentMessages(ChannelThread thread) returns boolean|error {
 }
 
 public function main() returns error? {
-    Channel channel = check getChannelDetails(forumChannelId);
-    if channel.'type != TYPE_FORUM_CHANNEL {
-        log:printError(string `The channel with ID ${forumChannelId} is not a Forum channel.`);
-        return;
-    }
+    // Channel channel = check getChannelDetails(forumChannelId);
+    // if channel.'type != TYPE_FORUM_CHANNEL {
+    //     log:printError(string `The channel with ID ${forumChannelId} is not a Forum channel.`);
+    //     return;
+    // }
 
-    ActiveThreads activeThreads = check getActiveThreads(channel.guild_id);
+    // ActiveThreads activeThreads = check getActiveThreads(channel.guild_id);
 
-    string summary = check generateSummaryFromRecentThreadMessages(activeThreads);
-    if summary == "" {
-        log:printInfo("Active threads have no recent messages.");
-        return;
-    }
+    // string summary = check generateSummaryFromRecentThreadMessages(activeThreads);
+    // if summary == "" {
+    //     log:printInfo("Active threads have no recent messages.");
+    //     return;
+    // }
 
     string subject = string `[Discord Forum Summery] Bellerina Forum Threads : ${regex:split(time:utcToString(time:utcNow()), "T")[0]}`;
-    check sendEmail(subject, TOP_HTML + summary + BOTTOM_HTML);
+    //check sendEmail(subject, TOP_HTML + summary + BOTTOM_HTML);
+    check sendEmail(subject, "hello world");
 }
