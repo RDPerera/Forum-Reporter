@@ -36,11 +36,11 @@ function constructPrompt(ChannelThread thread) returns string|error {
         return prompt;
     }
 
-    prompt += let Message {content, timestamp, author} = allMessages[0] in
+    prompt += let Message {content, author} = allMessages[0] in
                 string `${content} ${"\n"}Question Asked by: ${author.username} Reply: `;
 
     foreach int index in 1 ..< allMessages.length() {
-        Message {author: {username}, content, timestamp} = allMessages[index];
+        Message {author: {username}, content} = allMessages[index];
         prompt += string `${username}: ${content} ${"\n"}`;
     }
     return prompt;
